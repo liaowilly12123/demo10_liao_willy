@@ -41,4 +41,28 @@ function editUserInfo() {
   document.getElementById("personalInfoFields").disabled = false;
 }
 
+function saveUserInfo() {
+  userName = document.getElementById("nameInput").value;
+  userSchool = document.getElementById("schoolInput").value;
+  userCity = document.getElementById("cityInput").value;
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      // go to the correct user document by referencing to the user uid
+      currentUser = db.collection("users").doc(user.uid);
+
+      currentUser.update({
+        name: userName,
+        school: userSchool,
+        city: userCity
+      })
+      .then(() => {
+        console.log("Document successfully updated")
+      })
+    }
+  })
+  
+  document.getElementById("personalInfoFields").disabled = true;
+}
+
 populateInfo();
