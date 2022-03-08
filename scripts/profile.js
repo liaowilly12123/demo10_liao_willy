@@ -36,4 +36,9 @@ function populateInfo() {
   })
 }
 
+function editUserInfo() {
+  // enable the form fields
+  document.getElementById("personalInfoFields").disabled = false;
+}
+
 populateInfo();
