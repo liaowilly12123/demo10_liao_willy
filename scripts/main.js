@@ -2,7 +2,7 @@ function read_display_Quote(){
     //console.log("inside the function")
 
     //get into the right collection
-    db.collection("quotes").doc("tuesday")
+    db.collection("quotes").doc("Tuesday")
     .onSnapshot(function(tuesdayDoc) {
         //console.log(tuesdayDoc.data());
         document.getElementById("quote-goes-here").innerHTML=tuesdayDoc.data().quote;
@@ -29,3 +29,29 @@ function insertName(){
 }
 insertName();
 
+function setHikeData(id) {
+    localStorage.setItem('hikeID', id);
+}
+
+function populateCardsDynamically() {
+    let hikeCardTemplate = document.getElementById("hikeCardTemplate");
+    let hikeCardGroup = document.getElementById("hikeCardGroup");
+
+    db.collection("Hikes").get()
+        .then(allHikes => {
+            allHikes.forEach(doc => {
+                let hikeName = doc.data().name;
+                let hikeID = doc.data().id;
+                let hikeLength = doc.data().length;
+
+                let testHikeCard = hikeCardTemplate.content.cloneNode(true);
+                testHikeCard.querySelector(".card-title").innerHTML = hikeName;
+                testHikeCard.querySelector(".card-length").innerHTML = hikeLength;
+                testHikeCard.querySelector("a").onclick = () =>setHikeData(hikeID);
+                testHikeCard.querySelector("img").src = `./images/${hikeID}.jpg`;
+
+                hikeCardGroup.appendChild(testHikeCard);
+            })
+        })
+}
+populateCardsDynamically();
